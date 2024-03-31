@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 
 @Composable
@@ -49,7 +50,7 @@ fun FirstScreen(
     val state = viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    val weather = viewModel.weather.collectAsState()
+    val temperature = viewModel.temperature.collectAsState()
 
     // requestPermissionLauncher
     val requestLocationPermissions =
@@ -100,8 +101,8 @@ fun FirstScreen(
                 Icon(imageVector = Icons.Filled.LocationOn, contentDescription = "Location Button")
             }
         }
-        Text(text = state.value.weatherResponse?.current?.dt.toString(), fontSize = 70.sp)
-        Text(text = weather.value, fontSize = 20.sp)
+        Text(text = temperature.value, fontSize = 70.sp)
+        Text(text = temperature.value, fontSize = 20.sp)
         Text(text = "-10/2", fontSize = 40.sp)
         LazyRow(
 

@@ -79,11 +79,18 @@ dependencies {
     // Jetpack Compose Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
+    //
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+
     // Android ActivityResult API unresolved reference error registerForActivityResult
 //    implementation("androidx.activity:activity-ktx:1.8.2")
 
     // для геолокации
     implementation("com.google.android.gms:play-services-location:21.2.0")
+
+    // interceptor for network
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.12")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

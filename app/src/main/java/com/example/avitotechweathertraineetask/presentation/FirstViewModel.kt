@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Build
+import android.service.autofill.UserData
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import com.example.avitotechweathertraineetask.data.network.RetrofitClient
@@ -22,6 +23,12 @@ import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
 class FirstViewModel @Inject constructor(
@@ -32,7 +39,8 @@ class FirstViewModel @Inject constructor(
     private val context: Context
         get() = getApplication()
 
-    val weather = MutableStateFlow("10")
+    private val _temperature = MutableStateFlow("qwe")
+    val temperature = _temperature.asStateFlow()
     var uiState = MutableStateFlow(
         UiState(
             weatherResponse = mockWeather(),
@@ -53,49 +61,35 @@ class FirstViewModel @Inject constructor(
 
     // take the weather forecast from the city specified by the user
     // by default city = "Moscow"
-    fun getWeatherData(q: String = "Moscow") {
-        Log.i("check","qweqwqweqweqweqweqwe")
+    fun getWeatherData(query: String = "Москва") {
+        Log.i("check","1")
         viewModelScope.launch {
             try {
-//                uiState = uiState.copy(hasLocationAccess = isGranted)
-
-//                uiState.value.geoLocationResponse = retrofitClient.getGeoLocation(q)
-                uiState.value = uiState.value.copy(geoLocationResponse = retrofitClient.getGeoLocation(q))
-//                {uiState.value.geoLocationResponse?.first()?.country}
-                Log.i("check","rtyrtyrtyrtyrty")
-
-                val appid = BuildConfig.apiKey
-                val lat = uiState.value.geoLocationResponse!!.first().lat
-                val lon = uiState.value.geoLocationResponse!!.first().lon
-
-//                uiState.value.weatherResponse = retrofitClient.getCurrentAndForecastsWeatherData(
-//                    appid = appid, lat = lat, lon = lon)
-                uiState.value = uiState.value.copy(weatherResponse = retrofitClient.getCurrentAndForecastsWeatherData(
-                    appid = appid, lat = lat, lon = lon))
-
-                weather.value = uiState.value.weatherResponse!!.current.dt.toString()
+                Log.i("check","21")
+                val weather = retrofitClient.getCurrentWeatherByCity(query = query)
+//                uiState.value.weatherResponse = weather
+                _temperature.value = weather.location.name
+//                uiState.value = uiState.value.copy(weatherResponse = retrofitClient.getCurrentWeatherByCity(query = query))
+                Log.i("check","22")
             } catch (e: Exception) {
-                uiState.value.error = true
+//                uiState.value.error = true
+                Log.i("check","3")
             }
-        }
+       }
     }
 
     fun getWeatherDataByLocationServices() {
         viewModelScope.launch {
-            try {
-                val place = uiState.value.place
-                if (place != null) {
-                    uiState.value.geoLocationResponseByLocationServices =
-                        retrofitClient.getGeoLocation(place)
-                    val appid = BuildConfig.apiKey
-                    val lat = uiState.value.geoLocationResponseByLocationServices!!.first().lat
-                    val lon = uiState.value.geoLocationResponseByLocationServices!!.first().lon
-                    uiState.value.weatherResponseByLocationServices =
-                        retrofitClient.getCurrentAndForecastsWeatherData(appid = appid, lat = lat, lon = lon)
-                }
-            } catch (e: Exception) {
-                uiState.value.errorByLocationServices = true
-            }
+//            try {
+//                val place = uiState.value.place
+//                if (place != null) {
+//                    uiState.value.geoLocationResponseByLocationServices =
+//                        retrofitClient.getLocationByGeographicalObject(place)
+//                    val appid = BuildConfig.apiKey
+//                }
+//            } catch (e: Exception) {
+//                uiState.value.errorByLocationServices = true
+//            }
         }
     }
 
@@ -160,7 +154,7 @@ class FirstViewModel @Inject constructor(
     private fun mockWeather(): WeatherResponse? {
         return null
     }
-    private fun mockGeoLocation(): List<ResponseFromGeoRequest>? {
+    private fun mockGeoLocation(): ResponseFromGeoRequest? {
         return null
     }
 }
@@ -171,10 +165,10 @@ data class UiState(
     val isSaved: Boolean = false,
     val date: Long,
     var place: String? = null,
-    var geoLocationResponse: List<ResponseFromGeoRequest>?,
+    var geoLocationResponse: ResponseFromGeoRequest?,
     var weatherResponse: WeatherResponse?,
     var error: Boolean,
-    var geoLocationResponseByLocationServices: List<ResponseFromGeoRequest>?,
+    var geoLocationResponseByLocationServices: ResponseFromGeoRequest?,
     var weatherResponseByLocationServices: WeatherResponse?,
     var errorByLocationServices: Boolean,
 )
