@@ -1,8 +1,5 @@
 package com.example.avitotechweathertraineetask.presentation
 
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewModelScope
-import com.example.avitotechweathertraineetask.BuildConfig
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Application
@@ -10,25 +7,22 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Build
-import android.service.autofill.UserData
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.avitotechweathertraineetask.BuildConfig
 import com.example.avitotechweathertraineetask.data.network.RetrofitClient
 import com.example.avitotechweathertraineetask.data.network.model.ResponseFromGeoRequest
 import com.example.avitotechweathertraineetask.data.network.model.WeatherResponse
+import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
-import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
 class FirstViewModel @Inject constructor(
@@ -44,10 +38,8 @@ class FirstViewModel @Inject constructor(
     var uiState = MutableStateFlow(
         UiState(
             weatherResponse = mockWeather(),
-            geoLocationResponse = mockGeoLocation(),
             error = false,
-            weatherResponseByLocationServices = mockWeather(),
-            geoLocationResponseByLocationServices = mockGeoLocation(),
+            weatherResponseWithLocationServicesData = mockWeather(),
             errorByLocationServices = false,
             hasLocationAccess = hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION),
             date = getTodayDateInMillis(),
@@ -61,35 +53,27 @@ class FirstViewModel @Inject constructor(
 
     // take the weather forecast from the city specified by the user
     // by default city = "Moscow"
-    fun getWeatherData(query: String = "Москва") {
+    fun getWeatherData(q: String = "Moscow") {
         Log.i("check","1")
         viewModelScope.launch {
             try {
-                Log.i("check","21")
-                val weather = retrofitClient.getCurrentWeatherByCity(query = query)
-//                uiState.value.weatherResponse = weather
-                _temperature.value = weather.location.name
-//                uiState.value = uiState.value.copy(weatherResponse = retrofitClient.getCurrentWeatherByCity(query = query))
-                Log.i("check","22")
+                Log.i("check","2.1")
+                uiState.value = uiState.value.copy(weatherResponse = retrofitClient.getCurrentWeatherByCity(q = q))
+                Log.i("check","2.2")
             } catch (e: Exception) {
-//                uiState.value.error = true
+                uiState.value = uiState.value.copy(error = true)
                 Log.i("check","3")
             }
-       }
+        }
     }
 
     fun getWeatherDataByLocationServices() {
         viewModelScope.launch {
-//            try {
-//                val place = uiState.value.place
-//                if (place != null) {
-//                    uiState.value.geoLocationResponseByLocationServices =
-//                        retrofitClient.getLocationByGeographicalObject(place)
-//                    val appid = BuildConfig.apiKey
-//                }
-//            } catch (e: Exception) {
-//                uiState.value.errorByLocationServices = true
-//            }
+            try {
+
+            } catch (e: Exception) {
+                uiState.value = uiState.value.copy(errorByLocationServices = true)
+            }
         }
     }
 
@@ -154,21 +138,14 @@ class FirstViewModel @Inject constructor(
     private fun mockWeather(): WeatherResponse? {
         return null
     }
-    private fun mockGeoLocation(): ResponseFromGeoRequest? {
-        return null
-    }
 }
 
 data class UiState(
     var hasLocationAccess: Boolean,
-    val isSaving: Boolean = false,
-    val isSaved: Boolean = false,
     val date: Long,
     var place: String? = null,
-    var geoLocationResponse: ResponseFromGeoRequest?,
     var weatherResponse: WeatherResponse?,
     var error: Boolean,
-    var geoLocationResponseByLocationServices: ResponseFromGeoRequest?,
-    var weatherResponseByLocationServices: WeatherResponse?,
+    var weatherResponseWithLocationServicesData: WeatherResponse?,
     var errorByLocationServices: Boolean,
 )

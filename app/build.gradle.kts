@@ -92,6 +92,9 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.12")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
+    // Coil Compose
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

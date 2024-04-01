@@ -12,19 +12,19 @@ data class WeatherResponse(
 
 @Serializable
 data class Location(
-    val name: String,
-    val region: String,
-    val country: String,
+    val name: String = "",
+    val region: String = "",
+    val country: String = "",
     val lat: Float,
     val lon: Float,
-    val tz_id: String,
+    val tz_id: String = "",
     val localtime_epoch: Int,
-    val localtime: String
+    val localtime: String = "",
 )
 
 @Serializable
 data class Current(
-    val air_quality: AirQuality,
+//    val air_quality: AirQuality,
     val cloud: Int,
     val condition: Condition,
     val feelslike_c: Double,
@@ -33,7 +33,7 @@ data class Current(
     val gust_mph: Double,
     val humidity: Int,
     val is_day: Int,
-    val last_updated: String,
+    val last_updated: String = "",
     val last_updated_epoch: Int,
     val precip_in: Double,
     val precip_mm: Double,
@@ -45,39 +45,39 @@ data class Current(
     val vis_km: Double,
     val vis_miles: Double,
     val wind_degree: Int,
-    val wind_dir: String,
+    val wind_dir: String = "",
     val wind_kph: Double,
     val wind_mph: Double
 )
-@Serializable
-data class AirQuality(
-    val co: Double,
-    val gb_defra_index: Int,
-    val no2: Double,
-    val o3: Double,
-    val pm10: Double,
-    val pm2_5: Double,
-    val so2: Double,
-    val us_epa_index: Int
-)
+//@Serializable
+//data class AirQuality(
+//    val co: Double,
+//    @SerialName("gb-defra-index") val gb_defra_index: Int,
+//    val no2: Double,
+//    val o3: Double,
+//    val pm10: Double,
+//    val pm2_5: Double,
+//    val so2: Double,
+//    @SerialName("us-epa-index") val us_epa_index: Int
+//)
 @Serializable
 data class Condition(
     val code: Int,
-    val icon: String,
-    val text: String
+    val icon: String = "",
+    val text: String = "",
 )
 @Serializable
 data class Forecast(
-    val forecast: ForecastX
+    val forecastday: List<Castday>
 )
+//@Serializable
+//data class Forecastday(
+//    val castday: List<Castday>
+//)
 @Serializable
-data class ForecastX(
-    val forecastday: List<Forecastday>
-)
-@Serializable
-data class Forecastday(
+data class Castday(
     val astro: Astro,
-    val date: String,
+    val date: String = "",
     val date_epoch: Int,
     val day: Day,
     val hour: List<Hour>
@@ -87,15 +87,15 @@ data class Astro(
     val is_moon_up: Int,
     val is_sun_up: Int,
     val moon_illumination: Int,
-    val moon_phase: String,
-    val moonrise: String,
-    val moonset: String,
-    val sunrise: String,
-    val sunset: String
+    val moon_phase: String = "",
+    val moonrise: String = "",
+    val moonset: String = "",
+    val sunrise: String = "",
+    val sunset: String = "",
 )
 @Serializable
 data class Day(
-    val air_quality: AirQuality,
+//    val air_quality: AirQuality,
     val avghumidity: Int,
     val avgtemp_c: Double,
     val avgtemp_f: Double,
@@ -119,7 +119,7 @@ data class Day(
 )
 @Serializable
 data class Hour(
-    val air_quality: AirQuality,
+//    val air_quality: AirQuality,
     val chance_of_rain: Int,
     val chance_of_snow: Int,
     val cloud: Int,
@@ -143,7 +143,7 @@ data class Hour(
     val snow_cm: Double,
     val temp_c: Double,
     val temp_f: Double,
-    val time: String,
+    val time: String = "",
     val time_epoch: Int,
     val uv: Double,
     val vis_km: Double,
@@ -151,7 +151,7 @@ data class Hour(
     val will_it_rain: Int,
     val will_it_snow: Int,
     val wind_degree: Int,
-    val wind_dir: String,
+    val wind_dir: String = "",
     val wind_kph: Double,
     val wind_mph: Double,
     val windchill_c: Double,

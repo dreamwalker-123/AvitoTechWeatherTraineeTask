@@ -24,29 +24,31 @@ class RetrofitClient @Inject constructor(): WeatherApi {
         })
         .build()
 
+    private var json = Json { ignoreUnknownKeys = true }
+
     private val retrofit = Retrofit.Builder()
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(baseUrl).client(okHttpClient)
         .build()
         .create(WeatherApi::class.java)
 
     override suspend fun getCurrentWeatherByCity(
         @Query("key") key: String,
-        @Query("query") query: String,
+        @Query("q") q: String,
         @Query("days") days: Int,
         @Query("aqi") aqi: String,
-        @Query("alerts") alerts: String
+        @Query("alerts") alerts: String,
     ): WeatherResponse {
-        return retrofit.getCurrentWeatherByCity(key = key, query = query, days = days, aqi = aqi, alerts = alerts)
+        return retrofit.getCurrentWeatherByCity(key = key, q = q, days = days, aqi = aqi, alerts = alerts)
     }
 
     override suspend fun getLocationByGeographicalObject(
         key: String,
-        query: String,
+        q: String,
         days: Int,
         aqi: String,
         alerts: String
     ): ResponseFromGeoRequest {
-        TODO("Not yet implemented")
+        return retrofit.getLocationByGeographicalObject()
     }
 }
