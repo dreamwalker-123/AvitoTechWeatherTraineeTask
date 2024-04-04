@@ -1,17 +1,19 @@
 package com.example.avitotechweathertraineetask.data.hilt
 
-import android.app.Activity
-import androidx.activity.ComponentActivity
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-//@Module
-//@InstallIn(ComponentActivity::class)
-//object Module {
-//
-//    @Composable
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+//    @Singleton
 //    @Provides
-//    fun provide()
+//    fun provideContext(application: WeatherApplication): Context = application.applicationContext
+
+//    @Singleton
+//    @Provides
+//    fun provideApplication(@ApplicationContext app: Context): WeatherApplication{
+//        return app as WeatherApplication
+//    }
+}

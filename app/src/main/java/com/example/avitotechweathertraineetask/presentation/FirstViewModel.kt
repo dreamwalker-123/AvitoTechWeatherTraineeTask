@@ -2,23 +2,20 @@ package com.example.avitotechweathertraineetask.presentation
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Build
 import android.util.Log
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.avitotechweathertraineetask.BuildConfig
 import com.example.avitotechweathertraineetask.data.network.RetrofitClient
-import com.example.avitotechweathertraineetask.data.network.model.ResponseFromGeoRequest
 import com.example.avitotechweathertraineetask.data.network.model.WeatherResponse
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
@@ -26,15 +23,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FirstViewModel @Inject constructor(
-    val retrofitClient: RetrofitClient,
-    application: Application
-): AndroidViewModel(application) {
+    private val retrofitClient: RetrofitClient,
+    @ApplicationContext private val context: Context,
+): ViewModel() {
 
-    private val context: Context
-        get() = getApplication()
-
-    private val _temperature = MutableStateFlow("qwe")
-    val temperature = _temperature.asStateFlow()
     var uiState = MutableStateFlow(
         UiState(
             weatherResponse = mockWeather(),

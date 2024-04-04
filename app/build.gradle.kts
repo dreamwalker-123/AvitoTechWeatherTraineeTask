@@ -70,11 +70,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1-Beta")
 
     // Hilt
-    implementation ("com.google.dagger:hilt-android:2.44")
-    kapt ("com.google.dagger:hilt-compiler:2.44")
+    implementation ("com.google.dagger:hilt-android:2.48")
+    kapt ("com.google.dagger:hilt-compiler:2.48")
 
     // Hilt with Compose для возможности создания hiltViewModel()
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Jetpack Compose Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
@@ -90,7 +90,7 @@ dependencies {
 
     // interceptor for network
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.12")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     // Coil Compose
     implementation("io.coil-kt:coil-compose:2.6.0")

@@ -18,6 +18,11 @@ class RetrofitClient @Inject constructor(): WeatherApi {
     private val baseUrl =
         "https://api.weatherapi.com/v1/"
 
+//    наше апи
+//    https://www.weatherapi.com/api-explorer.aspx#forecast
+//    профиль
+//    https://www.weatherapi.com/my/
+
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
